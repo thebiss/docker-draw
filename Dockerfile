@@ -22,9 +22,7 @@ WORKDIR /opt/repo/draw
 COPY script/entrypoint.sh /entrypoint.sh
 
 VOLUME /opt/repo/draw/var
-RUN ln -s var/settings.json settings.json && \
-    chown drawer /entrypoint.sh && chmod o+x /entrypoint.sh && \
-    chown drawer settings.json
+RUN chown drawer /entrypoint.sh && chmod o+x /entrypoint.sh
 
 EXPOSE 9002
 
