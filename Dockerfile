@@ -3,7 +3,7 @@ MAINTAINER  https://m-ko-x.de Markus Kosmal <code@m-ko-x.de>
 
 # install requirements
 RUN apt-get update -yq && \
-    apt-get install -yq curl unzip nodejs git libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+    apt-get install -yq curl unzip nodejs git npm mysql-client libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 
 # support direct node calls
 RUN ln -s /usr/bin/nodejs /usr/bin/node
