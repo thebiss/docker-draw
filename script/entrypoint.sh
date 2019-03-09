@@ -27,43 +27,44 @@ fi
 
 DRAW_DB_HOST="${MYSQL_PORT_3306_TCP_ADDR}"
 
-: ${DRAW_TITLE:=Draw
+: ${DRAW_TITLE:=Draw}
 : ${DRAW_SESSION_KEY:=$(
-		node -p "require('crypto').randomBytes(32).toString('hex')")}
+                node -p "require('crypto').randomBytes(32).toString('hex')")}
 
 # Check if database already exists
 RESULT=`mysql -u${DRAW_DB_USER} -p${DRAW_DB_PASSWORD} \
-	-h${DRAW_DB_HOST} --skip-column-names \
-	-e "SHOW DATABASES LIKE '${DRAW_DB_NAME}'"`
+        -h${DRAW_DB_HOST} --skip-column-names \
+        -e "SHOW DATABASES LIKE '${DRAW_DB_NAME}'"`
 
 if [ "$RESULT" != $DRAW_DB_NAME ]; then
-	# mysql database does not exist, create it
-	echo "Creating database ${DRAW_DB_NAME}"
+        # mysql database does not exist, create it
+        echo "Creating database ${DRAW_DB_NAME}"
 
-	mysql -u${DRAW_DB_USER} -p${DRAW_DB_PASSWORD} \
-	      -h${DRAW_DB_HOST} \
-	      -e "create database ${DRAW_DB_NAME}"
+        mysql -u${DRAW_DB_USER} -p${DRAW_DB_PASSWORD} \
+              -h${DRAW_DB_HOST} \
+              -e "create database ${DRAW_DB_NAME}"
 fi
 
 cat << EOF > settings.json
 {
   "title": "${DRAW_TITLE}",
   "ip": "0.0.0.0",
-  "port" : 9001,
+  "port" : 9002,
   "sessionKey" : "${DRAW_SESSION_KEY}",
   "dbType" : "mysql",
   "dbSettings" : {
-                    "user"    : "${DRAW_DB_USER}", 
-                    "host"    : "${DRAW_DB_HOST}", 
-                    "password": "${DRAW_DB_PASSWORD}", 
+                    "user"    : "${DRAW_DB_USER}",
+                    "host"    : "${DRAW_DB_HOST}",
+                    "password": "${DRAW_DB_PASSWORD}",
                     "database": "${DRAW_DB_NAME}"
-                  },
+                  }
 EOF
 
 if [ $DRAW_ADMIN_PASSWORD ]; then
-	: ${DRAW_ADMIN_USER:=admin}
+        : ${DRAW_ADMIN_USER:=admin}
 
 cat << EOF >> settings.json
+  ,
   "users": {
     "${DRAW_ADMIN_USER}": {
       "password": "${DRAW_ADMIN_PASSWORD}",
@@ -79,3 +80,4 @@ cat << EOF >> settings.json
 EOF
 
 exec "$@"
+
